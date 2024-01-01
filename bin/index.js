@@ -39,7 +39,7 @@ program
 program
 	.command('buddha')
 	.action(() => {
-		const txt = readFileSync(resolvePath('./templates/budda.txt'), 'utf-8');
+		const txt = readFileSync(resolvePath('./templates/buddha.txt'), 'utf-8');
 		console.log('             ' + underline('Buddha bless you and your code'));
 		console.log(blue(txt));
 	});
@@ -77,21 +77,30 @@ function printLine(lineLength, text, textLength) {
  * @param {string} email
  */
 function printCard(name, email) {
-		const lineLength = 60;
+		// name
+		let fixedText = ' /\\_/\\  Name : ';
+		const nameLength = fixedText.length + name.length;
+		const nameText = fixedText + blue(name);
+
+		// email
+		fixedText = '( o.o ) Email: ';
+		const emailLength = fixedText.length + email.length;
+		const emailText = fixedText + blue(email);
+
+		const lineLength = Math.max(nameLength, emailLength) + 4;
 
 		printTopLine(lineLength);
-		printEmptyLine(lineLength);
-		printLine(lineLength, 'Name : ' + blue(name), name.length + 7);
-		printEmptyLine(lineLength);
-		printLine(lineLength, 'Email: ' + blue(email), email.length + 7);
-		printEmptyLine(lineLength);
+		printLine(lineLength, nameText, nameLength);
+		printLine(lineLength, emailText, emailLength);
+		fixedText = ' > ^ <';
+		printLine(lineLength, fixedText, fixedText.length);
 		printBottomLine(lineLength);
 }
 
 program
 	.command('gen')
 	.description('Generate a profile card ')
-	.option('-t, --template <type>', 'output template to use for output, one of {"svg", "txt"}; defaults to "txt"') // we will just do txt for now
+	.option('-t, --template <type>', 'output template to use for output, one of {"svg", "txt"}; defaults to "txt"')
 	.requiredOption('-n, --name <type>', 'name to print on card')
 	.requiredOption('-e, --email <type>', 'email to print on card')
 	.action((options) => {
