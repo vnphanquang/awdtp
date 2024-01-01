@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {{width}} 100" xml:space="preserve">
+	<style>
+		text {
+			font-family: monospace;
+			font-size: 16px;
+			white-space: pre;
+		}
+	</style>
+	<rect width={{width}} height="80" stroke="blue" fill="none" />
+	<g>
+		<text x="16" y="28"> /\_/\  Name :</text>
+		<text x="158" y="28">{{name}}</text>
+	</g>
+	<g>
+		<text x="16" y="46">( o.o ) Email: </text>
+		<text x="158" y="46">{{email}}</text>
+	</g>
+	<text x="16" y="64"> &#62; ^ &#60;</text>
+</svg>
