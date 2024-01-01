@@ -3,20 +3,20 @@ import { blue } from 'kleur/colors';
 /**
  * @param {number} lineLength 
  */
-function printEmptyLine(lineLength) {
-	console.log('│' + ' '.repeat(lineLength - 2) + '│');
+function genEmptyLine(lineLength) {
+	return '│' + ' '.repeat(lineLength - 2) + '│';
 }
 /**
  * @param {number} lineLength 
  */
-function printTopLine(lineLength) {
-	console.log('╭' + '─'.repeat(lineLength - 2) + '╮');
+function genTopLine(lineLength) {
+	return '╭' + '─'.repeat(lineLength - 2) + '╮';
 }
 /**
  * @param {number} lineLength 
  */
-function printBottomLine(lineLength) {
-	console.log('╰' + '─'.repeat(lineLength - 2) + '╯');
+function genBottomLine(lineLength) {
+	return '╰' + '─'.repeat(lineLength - 2) + '╯';
 }
 
 /**
@@ -24,31 +24,39 @@ function printBottomLine(lineLength) {
  * @param {string} text
  * @param {number} textLength
  */
-function printLine(lineLength, text, textLength) {
-	console.log('│ ' + text + ' '.repeat(lineLength - textLength - 4) + ' │');
+function genLine(lineLength, text, textLength) {
+	return '│ ' + text + ' '.repeat(lineLength - textLength - 4) + ' │';
 }
 
 /**
  * @param {string} name
  * @param {string} email
+ * @param {boolean} plain
  */
-export function printTxtCard(name, email) {
-		// name
-		let fixedText = ' /\\_/\\  Name : ';
-		const nameLength = fixedText.length + name.length;
-		const nameText = fixedText + blue(name);
+export function genTxt(name, email, plain = false) {
+	// name
+	let fixedText = ' /\\_/\\  Name : ';
+	const nameLength = fixedText.length + name.length;
+	const nameText = fixedText + (plain ? name : blue(name));
 
-		// email
-		fixedText = '( o.o ) Email: ';
-		const emailLength = fixedText.length + email.length;
-		const emailText = fixedText + blue(email);
+	// email
+	fixedText = '( o.o ) Email: ';
+	const emailLength = fixedText.length + email.length;
+	const emailText = fixedText + (plain ? email : blue(email));
 
-		const lineLength = Math.max(nameLength, emailLength) + 4;
+	const lineLength = Math.max(nameLength, emailLength) + 4;
 
-		printTopLine(lineLength);
-		printLine(lineLength, nameText, nameLength);
-		printLine(lineLength, emailText, emailLength);
-		fixedText = ' > ^ <';
-		printLine(lineLength, fixedText, fixedText.length);
-		printBottomLine(lineLength);
+	const lines = [];
+	lines.push(
+		genTopLine(lineLength),
+		genLine(lineLength, nameText, nameLength),
+		genLine(lineLength, emailText, emailLength),
+	);
+	fixedText = ' > ^ <';
+	lines.push(
+		genLine(lineLength, fixedText, fixedText.length),
+	genBottomLine(lineLength),
+	);
+
+	return lines.join('\n');
 }

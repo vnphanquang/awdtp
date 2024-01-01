@@ -1,13 +1,13 @@
 /** WORK IN PROGRESS. MUCH TO IMPROVE */
 import { Command } from 'commander';
 
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { intro, outro, text, confirm } from '@clack/prompts';
 import { underline, blue, red } from 'kleur/colors';
 
 import { resolvePath, loadPackageJSON, validateEmail } from './utilities.js';
-import { printTxtCard } from './txt.js';
-import { printSvgCard } from './svg.js';
+import { genTxt } from './txt.js';
+import { genSvg } from './svg.js';
 
 // declare the CLI program
 const pkg = loadPackageJSON();
@@ -31,15 +31,14 @@ program
 	.requiredOption('-n, --name <type>', 'name to print on card')
 	.requiredOption('-e, --email <type>', 'email to print on card')
 	.option('-t, --template <type>', 'output template to use for output, one of {"svg", "txt"}; defaults to "txt"')
+	.option('-o, --output <type>', 'output file path to write to')
 	.action((options) => {
-		const { name = '', email = '', template = 'txt' } = options;
-		switch(template) {
-			case 'txt': {
-				return printTxtCard(name, email);
-			}
-			case 'svg': {
-				return printSvgCard(name, email);
-			}
+		const { name = '', email = '', template = 'txt', output = '' } = options;
+		let outputStr = template === 'svg' ? genSvg(name, email) : genTxt(name, email, !!output)
+		if (output) {
+			writeFileSync(resolvePath(output), outputStr);
+		} else {
+			console.log(outputStr);
 		}
 	});
 

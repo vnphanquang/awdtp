@@ -6,14 +6,16 @@
 			white-space: pre;
 		}
 	</style>
-	<rect width={{width}} height="80" stroke="blue" fill="none" />
-	<g>
-		<text x="16" y="28"> /\_/\  Name :</text>
-		<text x="158" y="28">{{name}}</text>
+	<rect width={{width}} height="80" stroke="currentcolor" fill="none" />
+	<g fill="currentcolor">
+		<g>
+			<text x="16" y="28"> /\_/\  Name :</text>
+			<text x="158" y="28">{{name}}</text>
+		</g>
+		<g>
+			<text x="16" y="46">( o.o ) Email: </text>
+			<text x="158" y="46">{{email}}</text>
+		</g>
+		<text x="16" y="64"> &#62; ^ &#60;</text>
 	</g>
-	<g>
-		<text x="16" y="46">( o.o ) Email: </text>
-		<text x="158" y="46">{{email}}</text>
-	</g>
-	<text x="16" y="64"> &#62; ^ &#60;</text>
 </svg>
