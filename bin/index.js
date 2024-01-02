@@ -2,7 +2,7 @@
 import { Command } from 'commander';
 
 import { readFileSync, writeFileSync } from 'fs';
-import { intro, outro, text, confirm } from '@clack/prompts';
+import { intro, outro, text, confirm, select } from '@clack/prompts';
 import { underline, blue, red } from 'kleur/colors';
 
 import { resolvePath, loadPackageJSON, validateEmail } from './utilities.js';
@@ -58,11 +58,22 @@ async function prompt() {
 			if (!validateEmail(value)) return red('Invalid email!');
 		},
 	});
+	const template = await select({
+		message: 'Select the output format',
+		options: [
+			{ value: 'txt', label: 'TXT' },
+			{ value: 'svg', label: 'SVG', hint: 'test' },
+		],
+	})
+	const output = await text({
+		message: 'Output file path',
+		placeholder: 'leave blank for printing to stdout',
+	});
 	const shouldContinue = await confirm({
 		message: `Generating card with name ${blue(name)} and email ${blue(email)}. Confirm?`,
 	});
 	if (!shouldContinue) return prompt();
-	return { name, email };
+	return { name, email, template, output };
 }
 
 program
@@ -70,8 +81,13 @@ program
 	.description('User-friendly wizard for creating a profile card')
 	.action(async () => {
 		intro('Wizard for creating a profile card. Just follow instructions and you will be golden');
-		const { name, email } = await prompt();
-		printTxtCard(name, email);
+		const { name, email, template, output } = await prompt();
+		let outputStr = template === 'svg' ? genSvg(name, email) : genTxt(name, email, !!output)
+		if (output) {
+			writeFileSync(resolvePath(output), outputStr);
+		} else {
+			console.log(outputStr);
+		}
 		outro('Enjoy');
 	});
 
